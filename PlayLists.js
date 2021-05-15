@@ -1,3 +1,5 @@
+var int_i = 0;
+
 // NOTE
 //
 // `<SDKREF>~~</SDKREF>` には、
@@ -44,9 +46,23 @@ for( var int_idxOfPlayelists = 1 ; int_idxOfPlayelists <= objPlaylists.Count; in
     //曲毎ループ
     for( var int_idxOfTracks = 1 ; int_idxOfTracks <= objTracks.Count; int_idxOfTracks++ ){
         var objTrack = objTracks.Item(int_idxOfTracks); //<SDKREF>iTunesCOM.chm::/interfaceIITTrack.html</SDKREF>
-        // txfl.Write((typeof objTrack) + "\n");
         // txfl.Write(objTrack.Name + "\n");
-        txfl.Write(objTrack.Kind + "\n");
+        try{
+            txfl.Write(objTrack.Name + "\n");
+        
+        }catch(e){
+            if (e =="[object Error]"){
+                //NOTE
+                // .Name プロパティにアクセスした時にエラーになる場合がある。
+                // `プロシージャの呼び出し、または引数が不正です`
+                int_i++;
+                
+            }else{
+                
+            }
+            txfl.Write(e + "\n");
+        }
+        // txfl.Write(objTrack.Kind + "\n");
     }
 
     //ファイルへ書き込み
@@ -56,4 +72,8 @@ for( var int_idxOfPlayelists = 1 ; int_idxOfPlayelists <= objPlaylists.Count; in
 
 }
 
-WScript.Echo("Done!");
+if(0 < int_i){
+    WScript.Echo("int_i:" + int_i);
+}else{
+    WScript.Echo("Done!");
+}
