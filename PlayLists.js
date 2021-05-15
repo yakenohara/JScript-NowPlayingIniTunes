@@ -69,6 +69,9 @@ for( var int_idxOfPlayelists = 1 ; int_idxOfPlayelists <= objPlaylists.Count; in
         
     }
 
+    //ファイルクローズ
+    txfl.Close();
+
 }
 
 int_errTotal = int_errCountObjectError + int_errCountUnkown;
