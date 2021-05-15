@@ -26,7 +26,7 @@
 			info=titles[0];
 		}else{
 			WScript.Echo("不明な動作中");
-			WScript.Quit();
+			WScript.Quit(); // 終了
 		}
 	}catch(e){
 		WScript.Echo("iTunesが動作していません。");
@@ -34,7 +34,7 @@
 	
 //ファイルオープン
 	try{
-		var txfl = axobj.OpenTextFile(mydocu + "\\" + nowpfol + "\\" + nowpfil,8,true);
+		var txfl = axobj.OpenTextFile(mydocu + "\\" + nowpfol + "\\" + nowpfil, 8, true); //https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/opentextfile-method
 	}catch(e){
 		WScript.Echo(nowpfil + "が開けません。");
 	}
