@@ -20,7 +20,7 @@
 //曲情報収集
 	try{
 		if(track.Kind == 1){ //ローカル再生中
-			info=track.Artist + " - " + track.Name;
+			info=track.Artist + "\t" + track.Name;
 		}else if(track.Kind == 3) {//ストリーム再生中
 			var titles = itobj.currentStreamTitle.split(",");
 			info=titles[0];

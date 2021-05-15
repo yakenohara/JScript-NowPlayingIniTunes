@@ -1,10 +1,13 @@
-var int_i = 0;
 
 // NOTE
 //
 // `<SDKREF>~~</SDKREF>` には、
 // "\SDK Reference\iTunes_COM_9.1.0.80\iTunes COM 9.1.0.80\iTunesCOM.chm" 内の SDK Document の場所を記載
 // 
+
+var int_errCountObjectError = 0;
+var int_errCountUnkown = 0;
+var int_errTotal = 0;
 
 //ActiveXObject生成
 var axobj = new ActiveXObject("Scripting.FileSystemObject"); //FileSystem
@@ -20,7 +23,8 @@ var str_fol = "iTunesPlayLists";//専用フォルダ名
 //プレイリストの取得
 var objPlaylists = itobj
 	.LibrarySource //<SDKREF>iTunesCOM.chm::/interfaceIITSource.html</SDKREF>
-	.Playlists; //<SDKREF>iTunesCOM.chm::/interfaceIITPlaylistCollection.html</SDKREF>
+	.Playlists //<SDKREF>iTunesCOM.chm::/interfaceIITPlaylistCollection.html</SDKREF>
+;
 
 //フォルダ存在確認
 if(!(axobj.FolderExists(mydocu + "\\" + str_fol))){
@@ -39,41 +43,44 @@ for( var int_idxOfPlayelists = 1 ; int_idxOfPlayelists <= objPlaylists.Count; in
         var txfl = axobj.OpenTextFile(mydocu + "\\" + str_fol + "\\" + str_fileName, 2, true); //https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/opentextfile-method
     }catch(e){
         WScript.Echo(str_fileName + " が開けません。");
-        // WScript.Echo("開けません。");
         WScript.Quit(); // 終了
     }
 
-    //曲毎ループ
+    //Track 毎ループ
     for( var int_idxOfTracks = 1 ; int_idxOfTracks <= objTracks.Count; int_idxOfTracks++ ){
+        
         var objTrack = objTracks.Item(int_idxOfTracks); //<SDKREF>iTunesCOM.chm::/interfaceIITTrack.html</SDKREF>
-        // txfl.Write(objTrack.Name + "\n");
+        
         try{
-            txfl.Write(objTrack.Name + "\n");
+            var str_trackInfo = objTrack.Artist + "\t" + objTrack.Name;
+            txfl.Write(str_trackInfo + "\n");
         
         }catch(e){
             if (e =="[object Error]"){
                 //NOTE
-                // .Name プロパティにアクセスした時にエラーになる場合がある。
-                // `プロシージャの呼び出し、または引数が不正です`
-                int_i++;
+                // .Name プロパティにアクセスした時にエラーになる場合がある。原因不明。 Message -> `プロシージャの呼び出し、または引数が不正です`
+                int_errCountObjectError++;
                 
             }else{
-                
+                int_errCountUnkown++;
             }
             txfl.Write(e + "\n");
         }
-        // txfl.Write(objTrack.Kind + "\n");
+        
     }
-
-    //ファイルへ書き込み
-	// txfl.Write("3298472" + "\n");
-    // WScript.Echo(int_idxOfPlayelists);
-    // WScript.Echo(objPlaylist.Name);
 
 }
 
-if(0 < int_i){
-    WScript.Echo("int_i:" + int_i);
+int_errTotal = int_errCountObjectError + int_errCountUnkown;
+
+if(0 < int_errTotal){
+    var str_errMsg =
+        "Error Detected.\n\n" + 
+        "  [object Error] : " + int_errCountObjectError + "\n" +
+        "  Unkown : " + int_errCountUnkown
+    ;
+    WScript.Echo(str_errMsg);
+
 }else{
     WScript.Echo("Done!");
 }
