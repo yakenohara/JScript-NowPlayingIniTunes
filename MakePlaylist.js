@@ -1,12 +1,12 @@
-// CAUTION
+ï»¿// CAUTION
 // 
-// ‚±‚Ìƒtƒ@ƒCƒ‹‚Í•¶šƒR[ƒh‚ğ SJIS ‚Æ‚µ‚Ä•Û‘¶‚·‚é‚±‚ÆB
-// (SJIS Œ`®‚Å•Û‘¶‚µ‚È‚¢‚ÆA`WScript.Echo` ‚È‚Ç‚Å•¶š‰»‚¯‚·‚é)
+// ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚’ SJIS ã¨ã—ã¦ä¿å­˜ã™ã‚‹ã“ã¨ã€‚
+// (SJIS å½¢å¼ã§ä¿å­˜ã—ãªã„ã¨ã€`WScript.Echo` ãªã©ã§æ–‡å­—åŒ–ã‘ã™ã‚‹)
 
 // NOTE
 //
-// `<SDKREF>~~</SDKREF>` ‚É‚ÍA
-// "\SDK Reference\iTunes_COM_9.1.0.80\iTunes COM 9.1.0.80\iTunesCOM.chm" “à‚Ì SDK Document ‚ÌêŠ‚ğ‹LÚ
+// `<SDKREF>~~</SDKREF>` ã«ã¯ã€
+// "\SDK Reference\iTunes_COM_9.1.0.80\iTunes COM 9.1.0.80\iTunesCOM.chm" å†…ã® SDK Document ã®å ´æ‰€ã‚’è¨˜è¼‰
 // 
 
 // <Settings>--------------------------------------------
@@ -26,7 +26,7 @@ var strarr_songNames = new Array(
     new Array("Cities of The Future", "Infected Mushroom", "Original"),
     new Array("The Messenger 2012", "Infected Mushroom", "Original"),
     new Array("Love Foolosophy", "Jamiroquai", "A Funk Odyssey [Japan]"),
-    new Array("The Other Side", undefined/*"Jason Der?lo"*/, "Platinum Hits"), //todo ‹@íˆË‘¶•¶š? ‚ªæ‚èˆµ‚¦‚È‚¢
+    new Array("The Other Side", "Jason DerÃ¼lo", "Platinum Hits"),
     new Array("Party Rock Anthem", "LMFAO Feat. Lauren Bennet & GoonRock", "Sorry For Party Rocking"),
     new Array("Can't Hold Us (feat. Ray Dalton)", "Macklemore & Ryan Lewis", "Original"),
     new Array("Wrapped Up (feat. Travie McCoy)", "Olly Murs", "Original"),
@@ -45,32 +45,32 @@ var strarr_songNames = new Array(
 var int_notFoundTracks = 0;
 var strarr_ = new Array();
 
-// I—¹
+// çµ‚äº†
 try{
     var	iTunesApp = WScript.CreateObject("iTunes.Application"); //<SDKREF>iTunesCOM.chm::/interfaceIiTunes.html</SDKREF>
 }catch(e){
     WScript.Echo("Cannot create object `iTunes.Application`");
-	WScript.Quit(); // I—¹
+	WScript.Quit(); // çµ‚äº†
 }
 
 var	mainLibrarySource = iTunesApp.LibrarySource; //<SDKREF>iTunesCOM.chm::/interfaceIITSource.html</SDKREF>
 var	mainLibrary = iTunesApp.LibraryPlaylist; //<SDKREF>iTunesCOM.chm::/interfaceIITPlaylist.html</SDKREF>
 var	tracks = mainLibrary.Tracks; //<SDKREF>iTunesCOM.chm::/interfaceIITTrackCollection.html</SDKREF>
 
-//ƒvƒŒƒCƒŠƒXƒg‚Ìì¬
+//ãƒ—ãƒ¬ã‚¤ãƒªã‚¹ãƒˆã®ä½œæˆ
 var albumPlaylist = iTunesApp.CreatePlaylist(str_playlistName);
 
-// ƒvƒŒƒCƒŠƒXƒg‚Éƒgƒ‰ƒbƒN‚ğ’Ç‰Á
+// ãƒ—ãƒ¬ã‚¤ãƒªã‚¹ãƒˆã«ãƒˆãƒ©ãƒƒã‚¯ã‚’è¿½åŠ 
 for (var int_idxOfTracks in strarr_songNames){
     
     var strarr_trackInfo = strarr_songNames[int_idxOfTracks];
 
     var obj_track = func_selectTrack(tracks, strarr_trackInfo[0], strarr_trackInfo[1], strarr_trackInfo[2]);
 
-    if(obj_track !== undefined){ // ƒgƒ‰ƒbƒN‚ªŒ©‚Â‚©‚Á‚½ê‡
+    if(obj_track !== undefined){ // ãƒˆãƒ©ãƒƒã‚¯ãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
         albumPlaylist.AddTrack(obj_track);
     
-    }else{ // ƒgƒ‰ƒbƒN‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡
+    }else{ // ãƒˆãƒ©ãƒƒã‚¯ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆ
         int_notFoundTracks++;
         strarr_.push(strarr_trackInfo.toString());
     }
@@ -84,7 +84,7 @@ if(0 < int_notFoundTracks){
 }
 
 //
-// ƒgƒ‰ƒbƒNƒRƒŒƒNƒVƒ‡ƒ“‚©‚çw’è‹È–¼AƒA[ƒeƒBƒXƒg–¼AƒAƒ‹ƒoƒ€–¼‚ÉŠY“–‚·‚éƒgƒ‰ƒbƒN‚ğ•Ô‚·
+// ãƒˆãƒ©ãƒƒã‚¯ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã‹ã‚‰æŒ‡å®šæ›²åã€ã‚¢ãƒ¼ãƒ†ã‚£ã‚¹ãƒˆåã€ã‚¢ãƒ«ãƒãƒ åã«è©²å½“ã™ã‚‹ãƒˆãƒ©ãƒƒã‚¯ã‚’è¿”ã™
 //
 function func_selectTrack(trackClctn, nm, artst, albm){
 
@@ -98,21 +98,21 @@ function func_selectTrack(trackClctn, nm, artst, albm){
 
             var bl_found = true;
 
-            // ƒA[ƒeƒBƒXƒg–¼‚ªw’è‚³‚ê‚½‚¢‚½ê‡‚ÍƒA[ƒeƒBƒXƒg–¼‚ğƒ`ƒFƒbƒN
+            // ã‚¢ãƒ¼ãƒ†ã‚£ã‚¹ãƒˆåãŒæŒ‡å®šã•ã‚ŒãŸã„ãŸå ´åˆã¯ã‚¢ãƒ¼ãƒ†ã‚£ã‚¹ãƒˆåã‚’ãƒã‚§ãƒƒã‚¯
             if(typeof artst == "string"){
-                if(obj_track.Artist != artst){ // ƒA[ƒeƒBƒXƒg–¼‚ªˆÙ‚È‚éê‡
+                if(obj_track.Artist != artst){ // ã‚¢ãƒ¼ãƒ†ã‚£ã‚¹ãƒˆåãŒç•°ãªã‚‹å ´åˆ
                     bl_found = false;
                 }
             }
 
-            // ƒA[ƒeƒBƒXƒg–¼‚ªw’è‚³‚ê‚½‚¢‚½ê‡‚ÍƒA[ƒeƒBƒXƒg–¼‚ğƒ`ƒFƒbƒN
+            // ã‚¢ãƒ¼ãƒ†ã‚£ã‚¹ãƒˆåãŒæŒ‡å®šã•ã‚ŒãŸã„ãŸå ´åˆã¯ã‚¢ãƒ¼ãƒ†ã‚£ã‚¹ãƒˆåã‚’ãƒã‚§ãƒƒã‚¯
             if(typeof albm == "string"){
-                if(obj_track.Album != albm){ // ƒA[ƒeƒBƒXƒg–¼‚ªˆÙ‚È‚éê‡
+                if(obj_track.Album != albm){ // ã‚¢ãƒ¼ãƒ†ã‚£ã‚¹ãƒˆåãŒç•°ãªã‚‹å ´åˆ
                     bl_found = false;
                 }
             }
 
-            if(bl_found){ // ƒqƒbƒg”»’è
+            if(bl_found){ // ãƒ’ãƒƒãƒˆåˆ¤å®š
                 obj_ret = obj_track;
                 break;
             }
