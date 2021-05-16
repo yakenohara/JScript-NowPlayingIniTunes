@@ -9,12 +9,6 @@
 // "\SDK Reference\iTunes_COM_9.1.0.80\iTunes COM 9.1.0.80\iTunesCOM.chm" 内の SDK Document の場所を記載
 // 
 
-var str_crlf = "\r\n";
-
-var int_errCountObjectError = 0;
-var int_errCountUnkown = 0;
-var int_errTotal = 0;
-
 //ActiveXObject生成
 var axobj = new ActiveXObject("Scripting.FileSystemObject"); //FileSystem
 var wshobj = new ActiveXObject("WScript.Shell");//WScript
@@ -47,56 +41,69 @@ for( var int_idxOfPlayelists = 1 ; int_idxOfPlayelists <= objPlaylists.Count; in
     
     var objPlaylist = objPlaylists.Item(int_idxOfPlayelists); //<SDKREF>iTunesCOM.chm::/interfaceIITPlaylist.html</SDKREF>
     var objTracks = objPlaylist.Tracks; //<SDKREF>iTunesCOM.chm::/interfaceIITTrackCollection.html</SDKREF>
-    var str_fileName = objPlaylist.Name + ".txt"
 
-    //ファイルオープン
-    try{
-        //https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/opentextfile-method
-        var txfl = axobj.OpenTextFile(mydocu + "\\" + str_fol + "\\" + str_fileName, 2, true);
-    }catch(e){
-        WScript.Echo(str_fileName + " が開けません");
-        WScript.Quit(); // 終了
-    }
-
-    //Track 毎ループ
-    for( var int_idxOfTracks = 1 ; int_idxOfTracks <= objTracks.Count; int_idxOfTracks++ ){
+    if(0 < objTracks.Count){
         
-        var objTrack = objTracks.Item(int_idxOfTracks); //<SDKREF>iTunesCOM.chm::/interfaceIITTrack.html</SDKREF>
+        var str_fileName = objPlaylist.Name + ".txt"
+    
+        // ファイル関連の操作を提供する（ストリーム）オブジェクトを取得
+        var fh = new ActiveXObject( "ADODB.Stream" );
+            
+        // 読み込むファイルのタイプを指定
+        fh.Type    = 2;         // -1:Binary, 2:Text
         
-        try{
-            var str_trackInfo = objTrack.Artist + "\t" + objTrack.Name;
-            txfl.Write(str_trackInfo + str_crlf);
+        // 読み込むファイルの文字コードを指定
+        fh.charset = "UTF-8";   // Shift_JIS, EUC-JP, UTF-8、等々
         
-        }catch(e){
-            if (e =="[object Error]"){
-                //NOTE
-                // .Name プロパティにアクセスした時にエラーになる場合がある。原因不明。 Message -> `プロシージャの呼び出し、または引数が不正です`
-                int_errCountObjectError++;
-                
-            }else{
-                int_errCountUnkown++;
-            }
-            txfl.Write(e + str_crlf);
+        // 読み込むファイルの改行コードを指定
+        fh.LineSeparator = -1;  // ' -1 CrLf , 10 Lf , 13 Cr
+        
+        // ストリームを開く
+        fh.Open();
+    
+        //Track 毎ループ
+        for( var int_idxOfTracks = 1 ; int_idxOfTracks <= objTracks.Count; int_idxOfTracks++ ){
+            
+            var objTrack = objTracks.Item(int_idxOfTracks); //<SDKREF>iTunesCOM.chm::/interfaceIITTrack.html</SDKREF>
+            var str_trackInfo = objTrack.Name + "\t" + objTrack.Artist + "\t" + objTrack.Album
+    
+            // ファイルに格納したいテキストをストリームに登録
+            fh.WriteText( str_trackInfo, 1);  // 第2引数が 0:改行なし, 1:改行あり
+            
         }
+    
+        //<Save as UTF-8>------------------------------------------------
+    
+        //ファイルクローズ
+        // ポインタをデータの先頭に移動させて
+        fh.Position = 0;
+            
+        // バイナリモードに変更して
+        fh.Type = 1; 
         
+        // ポインタをBOMの分（3バイト）だけ後ろにずらして
+        fh.Position = 3;
+        
+        // 適当な変数にバイナリデータとしてデータを退避
+        var bin = fh.Read();
+        
+        // 一旦ストリームをクローズ＆オブジェクトを破棄
+        fh.Close();
+        fh = null;
+        
+        // 新たにストリームオブジェクトを作り直して
+        fh = new ActiveXObject( "ADODB.Stream" );
+        fh.Type    = 1; // バイナリモードに設定して
+        fh.Open();
+        fh.Write(bin);  // 退避しておいたデータを読み込み直して
+        
+        // そこから書き込めばBOMなしUTF-8ファイルの出来上がり
+        fh.SaveToFile( mydocu + "\\" + str_fol + "\\" + str_fileName , 2 ); // 第2引数が 1:新規作成, 2:上書き
+        fh.Close();
+        fh = null;
+    
+        //------------------------------------------------<Save as UTF-8>
     }
-
-    //ファイルクローズ
-    txfl.Close();
-
 }
 
-int_errTotal = int_errCountObjectError + int_errCountUnkown;
-
-if(0 < int_errTotal){
-    var str_errMsg =
-        "Done!" + str_crlf + str_crlf +
-        "But some error detected." + str_crlf + str_crlf +
-        "  [object Error] : " + int_errCountObjectError + str_crlf +
-        "  Unkown : " + int_errCountUnkown
-    ;
-    WScript.Echo(str_errMsg);
-
-}else{
-    WScript.Echo("Done!");
-}
+WScript.Echo("Done!");
