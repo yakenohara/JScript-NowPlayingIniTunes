@@ -1,9 +1,15 @@
+// CAUTION
+// 
+// このファイルは文字コードを SJIS として保存すること。
+// (SJIS 形式で保存しないと、`WScript.Echo` などで文字化けする)
 
 // NOTE
 //
 // `<SDKREF>~~</SDKREF>` には、
 // "\SDK Reference\iTunes_COM_9.1.0.80\iTunes COM 9.1.0.80\iTunesCOM.chm" 内の SDK Document の場所を記載
 // 
+
+var str_crlf = "\r\n";
 
 var int_errCountObjectError = 0;
 var int_errCountUnkown = 0;
@@ -40,7 +46,8 @@ for( var int_idxOfPlayelists = 1 ; int_idxOfPlayelists <= objPlaylists.Count; in
 
     //ファイルオープン
     try{
-        var txfl = axobj.OpenTextFile(mydocu + "\\" + str_fol + "\\" + str_fileName, 2, true); //https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/opentextfile-method
+        //https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/opentextfile-method
+        var txfl = axobj.OpenTextFile(mydocu + "\\" + str_fol + "\\" + str_fileName, 2, true);
     }catch(e){
         WScript.Echo(str_fileName + " が開けません。");
         WScript.Quit(); // 終了
@@ -53,7 +60,7 @@ for( var int_idxOfPlayelists = 1 ; int_idxOfPlayelists <= objPlaylists.Count; in
         
         try{
             var str_trackInfo = objTrack.Artist + "\t" + objTrack.Name;
-            txfl.Write(str_trackInfo + "\n");
+            txfl.Write(str_trackInfo + str_crlf);
         
         }catch(e){
             if (e =="[object Error]"){
@@ -64,7 +71,7 @@ for( var int_idxOfPlayelists = 1 ; int_idxOfPlayelists <= objPlaylists.Count; in
             }else{
                 int_errCountUnkown++;
             }
-            txfl.Write(e + "\n");
+            txfl.Write(e + str_crlf);
         }
         
     }
@@ -78,8 +85,8 @@ int_errTotal = int_errCountObjectError + int_errCountUnkown;
 
 if(0 < int_errTotal){
     var str_errMsg =
-        "Error Detected.\n\n" + 
-        "  [object Error] : " + int_errCountObjectError + "\n" +
+        "Error Detected." + str_crlf + str_crlf +
+        "  [object Error] : " + int_errCountObjectError + str_crlf +
         "  Unkown : " + int_errCountUnkown
     ;
     WScript.Echo(str_errMsg);
