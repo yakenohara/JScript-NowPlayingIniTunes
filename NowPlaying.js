@@ -3,18 +3,32 @@
 // このファイルは文字コードを SJIS として保存すること。
 // (SJIS 形式で保存しないと、`WScript.Echo` などで文字化けする)
 
+// NOTE
+//
+// `<SDKREF>~~</SDKREF>` には、
+// "\SDK Reference\iTunes_COM_9.1.0.80\iTunes COM 9.1.0.80\iTunesCOM.chm" 内の SDK Document の場所を記載
+// 
+
+var str_crlf = "\r\n";
+
 //ActiveXObject生成
 var axobj = new ActiveXObject("Scripting.FileSystemObject"); //FileSystem
 var wshobj = new ActiveXObject("WScript.Shell");//WScript
 
 //iTunesObject生成
-var itobj = WScript.CreateObject("iTunes.Application");
+try{
+	var itobj = WScript.CreateObject("iTunes.Application"); //<SDKREF>iTunesCOM.chm::/interfaceIiTunes.html</SDKREF>
+}catch(e){
+	WScript.Echo("Cannot create object `iTunes.Application`");
+	WScript.Quit(); // 終了
+}
+
 var track = itobj.CurrentTrack;    
 var info;
 
 //ファイル・フォルダ
 var mydocu = wshobj.SpecialFolders("MyDocuments");//マイドキュメント場所
-var nowpfol = "NowPlaying";//専用フォルダ名
+var nowpfol = "iTunesNowPlaying";//専用フォルダ名
 var nowpfil = "NowPlaying.txt";//専用ファイル名
 
 //フォルダ存在確認
@@ -34,7 +48,20 @@ try{
 		WScript.Quit(); // 終了
 	}
 }catch(e){
-	WScript.Echo("iTunesが動作していません。");
+	if(e == "[object Error]"){
+		var str_errMsg =
+			"`" + e + "` detected." + str_crlf + str_crlf +
+			"iTunesが動作していません"
+		;
+		WScript.Echo(str_errMsg);
+
+	}else{
+		var str_errMsg =
+			"`" + e + "` detected." + str_crlf + str_crlf +
+			WScript.Echo("Unkown Error.");
+		;
+	}
+	WScript.Quit(); // 終了
 }
 
 //ファイルオープン
@@ -42,7 +69,8 @@ try{
 	//https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/opentextfile-method
 	var txfl = axobj.OpenTextFile(mydocu + "\\" + nowpfol + "\\" + nowpfil, 8, true);
 }catch(e){
-	WScript.Echo(nowpfil + "が開けません。");
+	WScript.Echo(nowpfil + "が開けません");
+	WScript.Quit(); // 終了
 }
 
 //ファイルへ書き込み

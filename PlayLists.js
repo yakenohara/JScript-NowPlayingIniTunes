@@ -20,7 +20,12 @@ var axobj = new ActiveXObject("Scripting.FileSystemObject"); //FileSystem
 var wshobj = new ActiveXObject("WScript.Shell");//WScript
 
 //iTunesObject生成
-var itobj = WScript.CreateObject("iTunes.Application"); //<SDKREF>iTunesCOM.chm::/interfaceIiTunes.html</SDKREF>
+try{
+	var itobj = WScript.CreateObject("iTunes.Application"); //<SDKREF>iTunesCOM.chm::/interfaceIiTunes.html</SDKREF>
+}catch(e){
+	WScript.Echo("Cannot create object `iTunes.Application`");
+	WScript.Quit(); // 終了
+}
 
 //ファイル・フォルダ
 var mydocu = wshobj.SpecialFolders("MyDocuments");//マイドキュメント場所
@@ -49,7 +54,7 @@ for( var int_idxOfPlayelists = 1 ; int_idxOfPlayelists <= objPlaylists.Count; in
         //https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/opentextfile-method
         var txfl = axobj.OpenTextFile(mydocu + "\\" + str_fol + "\\" + str_fileName, 2, true);
     }catch(e){
-        WScript.Echo(str_fileName + " が開けません。");
+        WScript.Echo(str_fileName + " が開けません");
         WScript.Quit(); // 終了
     }
 
@@ -85,7 +90,8 @@ int_errTotal = int_errCountObjectError + int_errCountUnkown;
 
 if(0 < int_errTotal){
     var str_errMsg =
-        "Error Detected." + str_crlf + str_crlf +
+        "Done!" + str_crlf + str_crlf +
+        "But some error detected." + str_crlf + str_crlf +
         "  [object Error] : " + int_errCountObjectError + str_crlf +
         "  Unkown : " + int_errCountUnkown
     ;
