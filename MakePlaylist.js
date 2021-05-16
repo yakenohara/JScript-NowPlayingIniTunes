@@ -98,16 +98,16 @@ function func_selectTrack(trackClctn, nm, artst, albm){
 
             var bl_found = true;
 
-            // アーティスト名が指定されたいた場合はアーティスト名をチェック
+            // アーティスト名が指定された場合はアーティスト名をチェック
             if(typeof artst == "string"){
                 if(obj_track.Artist != artst){ // アーティスト名が異なる場合
                     bl_found = false;
                 }
             }
 
-            // アーティスト名が指定されたいた場合はアーティスト名をチェック
+            // アルバム名が指定された場合はアーティスト名をチェック
             if(typeof albm == "string"){
-                if(obj_track.Album != albm){ // アーティスト名が異なる場合
+                if(obj_track.Album != albm){ // アルバム名が異なる場合
                     bl_found = false;
                 }
             }
