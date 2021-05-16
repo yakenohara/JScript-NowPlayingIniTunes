@@ -1,57 +1,57 @@
-// CAUTION
-// 
-// ‚±‚Ìƒtƒ@ƒCƒ‹‚Í•¶šƒR[ƒh‚ğ SJIS ‚Æ‚µ‚Ä•Û‘¶‚·‚é‚±‚ÆB
-// (SJIS Œ`®‚Å•Û‘¶‚µ‚È‚¢‚ÆA`WScript.Echo` ‚È‚Ç‚Å•¶š‰»‚¯‚·‚é)
+ï»¿// <CAUTION>
+// ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚’ â€»BOMä»˜ãâ€»> UTF8 ã¨ã—ã¦ä¿å­˜ã™ã‚‹ã“ã¨ã€‚
+// (`Ã¼` ãªã©ã®æ–‡å­—åŒ–ã‘å›é¿)
+// </CAUTION>
 
 // NOTE
 //
-// `<SDKREF>~~</SDKREF>` ‚É‚ÍA
-// "\SDK Reference\iTunes_COM_9.1.0.80\iTunes COM 9.1.0.80\iTunesCOM.chm" “à‚Ì SDK Document ‚ÌêŠ‚ğ‹LÚ
+// `<SDKREF>~~</SDKREF>` ã«ã¯ã€
+// "\SDK Reference\iTunes_COM_9.1.0.80\iTunes COM 9.1.0.80\iTunesCOM.chm" å†…ã® SDK Document ã®å ´æ‰€ã‚’è¨˜è¼‰
 // 
 
 var str_crlf = "\r\n";
 
-//ActiveXObject¶¬
+//ActiveXObjectç”Ÿæˆ
 var axobj = new ActiveXObject("Scripting.FileSystemObject"); //FileSystem
 var wshobj = new ActiveXObject("WScript.Shell");//WScript
 
-//iTunesObject¶¬
+//iTunesObjectç”Ÿæˆ
 try{
 	var itobj = WScript.CreateObject("iTunes.Application"); //<SDKREF>iTunesCOM.chm::/interfaceIiTunes.html</SDKREF>
 }catch(e){
 	WScript.Echo("Cannot create object `iTunes.Application`");
-	WScript.Quit(); // I—¹
+	WScript.Quit(); // çµ‚äº†
 }
 
 var track = itobj.CurrentTrack;    
 var info;
 
-//ƒtƒ@ƒCƒ‹EƒtƒHƒ‹ƒ_
-var mydocu = wshobj.SpecialFolders("MyDocuments");//ƒ}ƒCƒhƒLƒ…ƒƒ“ƒgêŠ
-var nowpfol = "iTunesNowPlaying";//ê—pƒtƒHƒ‹ƒ_–¼
-var nowpfil = "NowPlaying.txt";//ê—pƒtƒ@ƒCƒ‹–¼
+//ãƒ•ã‚¡ã‚¤ãƒ«ãƒ»ãƒ•ã‚©ãƒ«ãƒ€
+var mydocu = wshobj.SpecialFolders("MyDocuments");//ãƒã‚¤ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆå ´æ‰€
+var nowpfol = "iTunesNowPlaying";//å°‚ç”¨ãƒ•ã‚©ãƒ«ãƒ€å
+var nowpfil = "NowPlaying.txt";//å°‚ç”¨ãƒ•ã‚¡ã‚¤ãƒ«å
 
-//ƒtƒHƒ‹ƒ_‘¶İŠm”F
+//ãƒ•ã‚©ãƒ«ãƒ€å­˜åœ¨ç¢ºèª
 if(!(axobj.FolderExists(mydocu + "\\" + nowpfol))){
-	axobj.CreateFolder(mydocu + "\\" + nowpfol);//ƒtƒHƒ‹ƒ_ì¬
+	axobj.CreateFolder(mydocu + "\\" + nowpfol);//ãƒ•ã‚©ãƒ«ãƒ€ä½œæˆ
 }
 
-//‹Èî•ñûW
+//æ›²æƒ…å ±åé›†
 try{
-	if(track.Kind == 1){ //ƒ[ƒJƒ‹Ä¶’†
+	if(track.Kind == 1){ //ãƒ­ãƒ¼ã‚«ãƒ«å†ç”Ÿä¸­
 		info=track.Artist + "\t" + track.Name;
-	}else if(track.Kind == 3) {//ƒXƒgƒŠ[ƒ€Ä¶’†
+	}else if(track.Kind == 3) {//ã‚¹ãƒˆãƒªãƒ¼ãƒ å†ç”Ÿä¸­
 		var titles = itobj.currentStreamTitle.split(",");
 		info=titles[0];
 	}else{
-		WScript.Echo("•s–¾‚È“®ì’†");
-		WScript.Quit(); // I—¹
+		WScript.Echo("ä¸æ˜ãªå‹•ä½œä¸­");
+		WScript.Quit(); // çµ‚äº†
 	}
 }catch(e){
 	if(e == "[object Error]"){
 		var str_errMsg =
 			"`" + e + "` detected." + str_crlf + str_crlf +
-			"iTunes‚ª“®ì‚µ‚Ä‚¢‚Ü‚¹‚ñ"
+			"iTunesãŒå‹•ä½œã—ã¦ã„ã¾ã›ã‚“"
 		;
 		WScript.Echo(str_errMsg);
 
@@ -61,20 +61,20 @@ try{
 			WScript.Echo("Unkown Error.");
 		;
 	}
-	WScript.Quit(); // I—¹
+	WScript.Quit(); // çµ‚äº†
 }
 
-//ƒtƒ@ƒCƒ‹ƒI[ƒvƒ“
+//ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ¼ãƒ—ãƒ³
 try{
 	//https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/opentextfile-method
 	var txfl = axobj.OpenTextFile(mydocu + "\\" + nowpfol + "\\" + nowpfil, 8, true);
 }catch(e){
-	WScript.Echo(nowpfil + "‚ªŠJ‚¯‚Ü‚¹‚ñ");
-	WScript.Quit(); // I—¹
+	WScript.Echo(nowpfil + "ãŒé–‹ã‘ã¾ã›ã‚“");
+	WScript.Quit(); // çµ‚äº†
 }
 
-//ƒtƒ@ƒCƒ‹‚Ö‘‚«‚İ
+//ãƒ•ã‚¡ã‚¤ãƒ«ã¸æ›¸ãè¾¼ã¿
 txfl.Write(info + "\n");
 
-//ƒtƒ@ƒCƒ‹ƒNƒ[ƒY
+//ãƒ•ã‚¡ã‚¤ãƒ«ã‚¯ãƒ­ãƒ¼ã‚º
 txfl.Close();

@@ -1,3 +1,3 @@
 @echo off
 
-WScript NowPlaying.js
+cscript NowPlaying.wsf

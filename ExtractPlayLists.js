@@ -1,42 +1,42 @@
-// CAUTION
-// 
-// ‚±‚Ìƒtƒ@ƒCƒ‹‚Í•¶šƒR[ƒh‚ğ SJIS ‚Æ‚µ‚Ä•Û‘¶‚·‚é‚±‚ÆB
-// (SJIS Œ`®‚Å•Û‘¶‚µ‚È‚¢‚ÆA`WScript.Echo` ‚È‚Ç‚Å•¶š‰»‚¯‚·‚é)
+ï»¿// <CAUTION>
+// ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚’ â€»BOMä»˜ãâ€» UTF8 ã¨ã—ã¦ä¿å­˜ã™ã‚‹ã“ã¨ã€‚
+// (`Ã¼` ãªã©ã®æ–‡å­—åŒ–ã‘å›é¿)
+// </CAUTION>
 
 // NOTE
 //
-// `<SDKREF>~~</SDKREF>` ‚É‚ÍA
-// "\SDK Reference\iTunes_COM_9.1.0.80\iTunes COM 9.1.0.80\iTunesCOM.chm" “à‚Ì SDK Document ‚ÌêŠ‚ğ‹LÚ
+// `<SDKREF>~~</SDKREF>` ã«ã¯ã€
+// "\SDK Reference\iTunes_COM_9.1.0.80\iTunes COM 9.1.0.80\iTunesCOM.chm" å†…ã® SDK Document ã®å ´æ‰€ã‚’è¨˜è¼‰
 // 
 
-//ActiveXObject¶¬
+//ActiveXObjectç”Ÿæˆ
 var axobj = new ActiveXObject("Scripting.FileSystemObject"); //FileSystem
 var wshobj = new ActiveXObject("WScript.Shell");//WScript
 
-//iTunesObject¶¬
+//iTunesObjectç”Ÿæˆ
 try{
 	var itobj = WScript.CreateObject("iTunes.Application"); //<SDKREF>iTunesCOM.chm::/interfaceIiTunes.html</SDKREF>
 }catch(e){
 	WScript.Echo("Cannot create object `iTunes.Application`");
-	WScript.Quit(); // I—¹
+	WScript.Quit(); // çµ‚äº†
 }
 
-//ƒtƒ@ƒCƒ‹EƒtƒHƒ‹ƒ_
-var mydocu = wshobj.SpecialFolders("MyDocuments");//ƒ}ƒCƒhƒLƒ…ƒƒ“ƒgêŠ
-var str_fol = "iTunesPlayLists";//ê—pƒtƒHƒ‹ƒ_–¼
+//ãƒ•ã‚¡ã‚¤ãƒ«ãƒ»ãƒ•ã‚©ãƒ«ãƒ€
+var mydocu = wshobj.SpecialFolders("MyDocuments");//ãƒã‚¤ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆå ´æ‰€
+var str_fol = "iTunesPlayLists";//å°‚ç”¨ãƒ•ã‚©ãƒ«ãƒ€å
 
-//ƒvƒŒƒCƒŠƒXƒg‚Ìæ“¾
+//ãƒ—ãƒ¬ã‚¤ãƒªã‚¹ãƒˆã®å–å¾—
 var objPlaylists = itobj
 	.LibrarySource //<SDKREF>iTunesCOM.chm::/interfaceIITSource.html</SDKREF>
 	.Playlists //<SDKREF>iTunesCOM.chm::/interfaceIITPlaylistCollection.html</SDKREF>
 ;
 
-//ƒtƒHƒ‹ƒ_‘¶İŠm”F
+//ãƒ•ã‚©ãƒ«ãƒ€å­˜åœ¨ç¢ºèª
 if(!(axobj.FolderExists(mydocu + "\\" + str_fol))){
-    axobj.CreateFolder(mydocu + "\\" + str_fol);//ƒtƒHƒ‹ƒ_ì¬
+    axobj.CreateFolder(mydocu + "\\" + str_fol);//ãƒ•ã‚©ãƒ«ãƒ€ä½œæˆ
 }
 
-//ƒvƒŒƒCƒŠƒXƒg–ˆƒ‹[ƒv
+//ãƒ—ãƒ¬ã‚¤ãƒªã‚¹ãƒˆæ¯ãƒ«ãƒ¼ãƒ—
 for( var int_idxOfPlayelists = 1 ; int_idxOfPlayelists <= objPlaylists.Count; int_idxOfPlayelists++ ){
     
     var objPlaylist = objPlaylists.Item(int_idxOfPlayelists); //<SDKREF>iTunesCOM.chm::/interfaceIITPlaylist.html</SDKREF>
@@ -46,59 +46,59 @@ for( var int_idxOfPlayelists = 1 ; int_idxOfPlayelists <= objPlaylists.Count; in
         
         var str_fileName = objPlaylist.Name + ".txt"
     
-        // ƒtƒ@ƒCƒ‹ŠÖ˜A‚Ì‘€ì‚ğ’ñ‹Ÿ‚·‚éiƒXƒgƒŠ[ƒ€jƒIƒuƒWƒFƒNƒg‚ğæ“¾
+        // ãƒ•ã‚¡ã‚¤ãƒ«é–¢é€£ã®æ“ä½œã‚’æä¾›ã™ã‚‹ï¼ˆã‚¹ãƒˆãƒªãƒ¼ãƒ ï¼‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—
         var fh = new ActiveXObject( "ADODB.Stream" );
             
-        // “Ç‚İ‚Şƒtƒ@ƒCƒ‹‚Ìƒ^ƒCƒv‚ğw’è
+        // èª­ã¿è¾¼ã‚€ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¿ã‚¤ãƒ—ã‚’æŒ‡å®š
         fh.Type    = 2;         // -1:Binary, 2:Text
         
-        // “Ç‚İ‚Şƒtƒ@ƒCƒ‹‚Ì•¶šƒR[ƒh‚ğw’è
-        fh.charset = "UTF-8";   // Shift_JIS, EUC-JP, UTF-8A“™X
+        // èª­ã¿è¾¼ã‚€ãƒ•ã‚¡ã‚¤ãƒ«ã®æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚’æŒ‡å®š
+        fh.charset = "UTF-8";   // Shift_JIS, EUC-JP, UTF-8ã€ç­‰ã€…
         
-        // “Ç‚İ‚Şƒtƒ@ƒCƒ‹‚Ì‰üsƒR[ƒh‚ğw’è
+        // èª­ã¿è¾¼ã‚€ãƒ•ã‚¡ã‚¤ãƒ«ã®æ”¹è¡Œã‚³ãƒ¼ãƒ‰ã‚’æŒ‡å®š
         fh.LineSeparator = -1;  // ' -1 CrLf , 10 Lf , 13 Cr
         
-        // ƒXƒgƒŠ[ƒ€‚ğŠJ‚­
+        // ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’é–‹ã
         fh.Open();
     
-        //Track –ˆƒ‹[ƒv
+        //Track æ¯ãƒ«ãƒ¼ãƒ—
         for( var int_idxOfTracks = 1 ; int_idxOfTracks <= objTracks.Count; int_idxOfTracks++ ){
             
             var objTrack = objTracks.Item(int_idxOfTracks); //<SDKREF>iTunesCOM.chm::/interfaceIITTrack.html</SDKREF>
             var str_trackInfo = objTrack.Name + "\t" + objTrack.Artist + "\t" + objTrack.Album
     
-            // ƒtƒ@ƒCƒ‹‚ÉŠi”[‚µ‚½‚¢ƒeƒLƒXƒg‚ğƒXƒgƒŠ[ƒ€‚É“o˜^
-            fh.WriteText( str_trackInfo, 1);  // ‘æ2ˆø”‚ª 0:‰üs‚È‚µ, 1:‰üs‚ ‚è
+            // ãƒ•ã‚¡ã‚¤ãƒ«ã«æ ¼ç´ã—ãŸã„ãƒ†ã‚­ã‚¹ãƒˆã‚’ã‚¹ãƒˆãƒªãƒ¼ãƒ ã«ç™»éŒ²
+            fh.WriteText( str_trackInfo, 1);  // ç¬¬2å¼•æ•°ãŒ 0:æ”¹è¡Œãªã—, 1:æ”¹è¡Œã‚ã‚Š
             
         }
     
         //<Save as UTF-8>------------------------------------------------
     
-        //ƒtƒ@ƒCƒ‹ƒNƒ[ƒY
-        // ƒ|ƒCƒ“ƒ^‚ğƒf[ƒ^‚Ìæ“ª‚ÉˆÚ“®‚³‚¹‚Ä
+        //ãƒ•ã‚¡ã‚¤ãƒ«ã‚¯ãƒ­ãƒ¼ã‚º
+        // ãƒã‚¤ãƒ³ã‚¿ã‚’ãƒ‡ãƒ¼ã‚¿ã®å…ˆé ­ã«ç§»å‹•ã•ã›ã¦
         fh.Position = 0;
             
-        // ƒoƒCƒiƒŠƒ‚[ƒh‚É•ÏX‚µ‚Ä
+        // ãƒã‚¤ãƒŠãƒªãƒ¢ãƒ¼ãƒ‰ã«å¤‰æ›´ã—ã¦
         fh.Type = 1; 
         
-        // ƒ|ƒCƒ“ƒ^‚ğBOM‚Ì•ªi3ƒoƒCƒgj‚¾‚¯Œã‚ë‚É‚¸‚ç‚µ‚Ä
+        // ãƒã‚¤ãƒ³ã‚¿ã‚’BOMã®åˆ†ï¼ˆ3ãƒã‚¤ãƒˆï¼‰ã ã‘å¾Œã‚ã«ãšã‚‰ã—ã¦
         fh.Position = 3;
         
-        // “K“–‚È•Ï”‚ÉƒoƒCƒiƒŠƒf[ƒ^‚Æ‚µ‚Äƒf[ƒ^‚ğ‘Ş”ğ
+        // é©å½“ãªå¤‰æ•°ã«ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ã¨ã—ã¦ãƒ‡ãƒ¼ã‚¿ã‚’é€€é¿
         var bin = fh.Read();
         
-        // ˆê’UƒXƒgƒŠ[ƒ€‚ğƒNƒ[ƒY•ƒIƒuƒWƒFƒNƒg‚ğ”jŠü
+        // ä¸€æ—¦ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’ã‚¯ãƒ­ãƒ¼ã‚ºï¼†ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç ´æ£„
         fh.Close();
         fh = null;
         
-        // V‚½‚ÉƒXƒgƒŠ[ƒ€ƒIƒuƒWƒFƒNƒg‚ğì‚è’¼‚µ‚Ä
+        // æ–°ãŸã«ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œã‚Šç›´ã—ã¦
         fh = new ActiveXObject( "ADODB.Stream" );
-        fh.Type    = 1; // ƒoƒCƒiƒŠƒ‚[ƒh‚Éİ’è‚µ‚Ä
+        fh.Type    = 1; // ãƒã‚¤ãƒŠãƒªãƒ¢ãƒ¼ãƒ‰ã«è¨­å®šã—ã¦
         fh.Open();
-        fh.Write(bin);  // ‘Ş”ğ‚µ‚Ä‚¨‚¢‚½ƒf[ƒ^‚ğ“Ç‚İ‚İ’¼‚µ‚Ä
+        fh.Write(bin);  // é€€é¿ã—ã¦ãŠã„ãŸãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ç›´ã—ã¦
         
-        // ‚»‚±‚©‚ç‘‚«‚ß‚ÎBOM‚È‚µUTF-8ƒtƒ@ƒCƒ‹‚Ìo—ˆã‚ª‚è
-        fh.SaveToFile( mydocu + "\\" + str_fol + "\\" + str_fileName , 2 ); // ‘æ2ˆø”‚ª 1:V‹Kì¬, 2:ã‘‚«
+        // ãã“ã‹ã‚‰æ›¸ãè¾¼ã‚ã°BOMãªã—UTF-8ãƒ•ã‚¡ã‚¤ãƒ«ã®å‡ºæ¥ä¸ŠãŒã‚Š
+        fh.SaveToFile( mydocu + "\\" + str_fol + "\\" + str_fileName , 2 ); // ç¬¬2å¼•æ•°ãŒ 1:æ–°è¦ä½œæˆ, 2:ä¸Šæ›¸ã
         fh.Close();
         fh = null;
     

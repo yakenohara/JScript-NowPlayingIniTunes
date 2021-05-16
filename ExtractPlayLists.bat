@@ -1,3 +1,3 @@
 @echo off
 
-WScript ExtractPlayLists.js
+cscript ExtractPlayLists.wsf
