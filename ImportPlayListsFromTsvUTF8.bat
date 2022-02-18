@@ -1,3 +1,3 @@
 @echo off
 
-cscript MakePlaylist.wsf
+cscript ImportPlayListsFromTsvUTF8.wsf

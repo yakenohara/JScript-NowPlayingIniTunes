@@ -3,6 +3,6 @@
   <job>
   <?job error="True" debug="True" ?>
     <runtime/>
-    <script language="JScript" src="./ExtractPlayLists.js"/>
+    <script language="JScript" src="./ExportPlayListsAsTsvUTF8.js"/>
   </job>
 </package>

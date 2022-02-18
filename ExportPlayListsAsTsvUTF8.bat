@@ -1,3 +1,3 @@
 @echo off
 
-cscript ExtractPlayLists.wsf
+cscript ExportPlayListsAsTsvUTF8.wsf
