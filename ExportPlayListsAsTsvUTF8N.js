@@ -74,9 +74,37 @@ for( var int_idxOfPlayelists = 1 ; int_idxOfPlayelists <= objPlaylists.Count; in
             
         }
     
+        //<Save as UTF-8N>------------------------------------------------
+    
+        //ファイルクローズ
+        // ポインタをデータの先頭に移動させて
+        fh.Position = 0;
+            
+        // バイナリモードに変更して
+        fh.Type = 1; 
+        
+        // ポインタをBOMの分（3バイト）だけ後ろにずらして
+        fh.Position = 3;
+        
+        // 適当な変数にバイナリデータとしてデータを退避
+        var bin = fh.Read();
+        
+        // 一旦ストリームをクローズ＆オブジェクトを破棄
+        fh.Close();
+        fh = null;
+        
+        // 新たにストリームオブジェクトを作り直して
+        fh = new ActiveXObject( "ADODB.Stream" );
+        fh.Type    = 1; // バイナリモードに設定して
+        fh.Open();
+        fh.Write(bin);  // 退避しておいたデータを読み込み直して
+        
+        // そこから書き込めばBOMなしUTF-8ファイルの出来上がり
         fh.SaveToFile( mydocu + "\\" + str_fol + "\\" + str_fileName , 2 ); // 第2引数が 1:新規作成, 2:上書き
         fh.Close();
         fh = null;
+    
+        //------------------------------------------------<Save as UTF-8N>
     }
 }
 
