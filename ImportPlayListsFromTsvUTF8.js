@@ -1,4 +1,6 @@
-﻿// <CAUTION>
+﻿// ExportPlayListsAsTsvUTF8 で吐き出した TSV ファイル形式のプレイリストファイルを取り込む。  
+
+// <CAUTION>
 // このファイルは文字コードを ※BOM付き※ UTF8 として保存すること。
 // (`ü` などの文字化け回避)
 // </CAUTION>
@@ -10,7 +12,6 @@
 // 
 
 // <Settings>--------------------------------------------
-var str_playlistName = "Run";
 var strarr_tsvPaths = new Array(
     "C:\\Users\\username\\Documents\\iTunesPlayLists\\Oldies.tsv",
     "C:\\Users\\username\\Documents\\iTunesPlayLists\\Run.tsv",

@@ -14,3 +14,40 @@
 ## Run by batch file
 
 .bat をたたく
+
+# ExportPlayListsAsTsvUTF8
+
+iTunes のプレイリストを TSV ファイルに吐き出す  
+
+吐き出すファイルは `C:\Users\<username>\Documents\iTunesPlayLists` 配下に `<プレイリスト名>.tsv` の形式。 
+
+`<CAUTION!>`  
+実行前に iTunes を起動しておく  
+`</CAUTION!>`
+
+# ImportPlayListsFromTsvUTF8
+
+ExportPlayListsAsTsvUTF8 で吐き出した TSV ファイル形式のプレイリストファイルを取り込む。  
+
+
+`<CAUTION!>`  
+実行前に以下を実施しておく  
+・ExportPlayListsAsTsvUTF8.js で吐き出した TSV ファイルをフルパスで ImportPlayListsFromTsvUTF8.js 内の `var strarr_tsvPaths = new Array(~)` 内に記載しておく  
+・iTunes を起動しておく  
+`</CAUTION!>`
+
+# NowPlaying
+
+再生中のトラックの曲名、アーティストを TSV ファイルに保存する  
+保存先ファイルは `C:\Users\<username>\Documents\iTunesNowPlaying\NowPlaying.tsv`
+
+
+`<CAUTION!>`  
+実行前に iTunes を起動しておく  
+`</CAUTION!>`
+
+# [TIPS] iTunes COM for Windows SDK
+
+[https://developer.apple.com/downloads/](https://developer.apple.com/downloads/) にアクセスして Apple ID でログイン
+
+![](assets/images/iTunes-COM-for-Windows-SDK2.svg)  
