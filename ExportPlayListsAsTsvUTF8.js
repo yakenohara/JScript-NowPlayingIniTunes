@@ -67,7 +67,7 @@ for( var int_idxOfPlayelists = 1 ; int_idxOfPlayelists <= objPlaylists.Count; in
         for( var int_idxOfTracks = 1 ; int_idxOfTracks <= objTracks.Count; int_idxOfTracks++ ){
             
             var objTrack = objTracks.Item(int_idxOfTracks); //<SDKREF>iTunesCOM.chm::/interfaceIITTrack.html</SDKREF>
-            var str_trackInfo = objTrack.Name + "\t" + objTrack.Artist + "\t" + objTrack.Album
+            var str_trackInfo = objTrack.Name + "\t" + objTrack.Artist + "\t" + objTrack.Album + "\t" + objTrack.Location
     
             // ファイルに格納したいテキストをストリームに登録
             fh.WriteText( str_trackInfo, 1);  // 第2引数が 0:改行なし, 1:改行あり
